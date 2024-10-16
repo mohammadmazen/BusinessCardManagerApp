@@ -29,7 +29,9 @@ public class BusinessCardRepository : IBusinessCardRepository
     }
     public async Task<IEnumerable<BusinessCard>> GetAllAsync()
     {
-        return await _context.BusinessCards.ToListAsync();
+        return await _context.BusinessCards
+            .AsNoTracking()
+            .ToListAsync();
     }
     public async Task<BusinessCard> GetByIdAsync(Guid id)
     {
