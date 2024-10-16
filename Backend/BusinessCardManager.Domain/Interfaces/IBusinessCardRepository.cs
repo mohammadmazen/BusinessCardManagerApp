@@ -1,11 +1,12 @@
 ﻿using BusinessCardManager.Domain.Entities;
+using BusinessCardManager.Domain.Enums;
 
 namespace BusinessCardManager.Domain.Interfaces;
 public interface IBusinessCardRepository
 {
-    Task<IEnumerable<BusinessCard>> GetBusinessCardsAsync();
-    Task<BusinessCard> GetBusinessCardByIdAsync(Guid id);
-    Task<BusinessCard> AddBusinessCardAsync(BusinessCard businessCard);
-    Task<BusinessCard> UpdateBusinessCardAsync(BusinessCard businessCard);
-    Task<BusinessCard> DeleteBusinessCardAsync(Guid id);
+    Task<BusinessCard> GetByIdAsync(int id);
+    Task<IEnumerable<BusinessCard>> GetAllAsync();
+    Task AddAsync(BusinessCard businessCard);
+    Task UpdateAsync(BusinessCard businessCard);
+    Task DeleteAsync(int id);
 }

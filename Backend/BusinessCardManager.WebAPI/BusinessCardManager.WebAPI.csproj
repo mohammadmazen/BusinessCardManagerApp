@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessCardManager.Infrastructure\BusinessCardManager.Infrastructure.csproj" />
     <ProjectReference Include="..\BusinessCardManager.Application\BusinessCardManager.Application.csproj" />
-    <ProjectReference Include="..\BusinessCardManager.Domain\BusinessCardManager.Domain.csproj" />
   </ItemGroup>
 
 </Project>
