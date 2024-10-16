@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace BusinessCardManager.Application.DTOs;
 public class BusinessCardCreateDto
 {
-    [Required]
     public Guid? Id { get; set; }
 
     [Required]
