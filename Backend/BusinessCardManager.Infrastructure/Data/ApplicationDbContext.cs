@@ -1,11 +1,6 @@
 ﻿using BusinessCardManager.Domain.Entities;
 using BusinessCardManager.Domain.Interfaces.Configurations;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessCardManager.Infrastructure.Data;
 public class ApplicationDbContext : DbContext
@@ -22,7 +17,5 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new BusinessCardConfiguration());
-
-        // Apply other configurations
     }
 }
