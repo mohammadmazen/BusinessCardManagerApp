@@ -18,7 +18,7 @@ public class BusinessCardRepository : IBusinessCardRepository
         await _context.BusinessCards.AddAsync(businessCard);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         var businessCard = await _context.BusinessCards.FindAsync(id);
         if (businessCard != null)
@@ -31,7 +31,7 @@ public class BusinessCardRepository : IBusinessCardRepository
     {
         return await _context.BusinessCards.ToListAsync();
     }
-    public async Task<BusinessCard> GetByIdAsync(int id)
+    public async Task<BusinessCard> GetByIdAsync(Guid id)
     {
         var entity = await _context.BusinessCards.FindAsync(id);
         if (entity == null)
@@ -39,10 +39,5 @@ public class BusinessCardRepository : IBusinessCardRepository
             throw new KeyNotFoundException($"Business card with ID {id} was not found.");
         }
         return entity;
-    }
-    public async Task UpdateAsync(BusinessCard businessCard)
-    {
-        _context.BusinessCards.Update(businessCard);
-        await _context.SaveChangesAsync();
     }
 }
