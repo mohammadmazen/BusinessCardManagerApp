@@ -2,6 +2,11 @@
 using BusinessCardManager.Application.Interfaces;
 using BusinessCardManager.Domain.Entities;
 using BusinessCardManager.Domain.Interfaces;
+using CsvHelper;
+using System.Globalization;
+using System.Linq.Expressions;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace BusinessCardManager.Application.Services;
 public class BusinessCardService : IBusinessCardService
@@ -40,6 +45,35 @@ public class BusinessCardService : IBusinessCardService
         }
         return MapEntityToReadDto(businessCard);
     }
+    // Export methods
+    public async Task<byte[]> ExportBusinessCardsToCsvAsync()
+    {
+        var selector = BusinessCardToReadDtoSelector();
+        var businessCardDtos = await _repository.GetAllAsync(selector);
+
+        // Use CSVHelper to write data to a MemoryStream
+        using var memoryStream = new MemoryStream();
+        using var streamWriter = new StreamWriter(memoryStream);
+        using var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+
+        await csvWriter.WriteRecordsAsync(businessCardDtos);
+
+        await streamWriter.FlushAsync();
+
+        memoryStream.Position = 0;
+
+        return memoryStream.ToArray();
+    }
+
+    public async Task<byte[]> ExportBusinessCardsToXmlAsync()
+    {
+        var selector = BusinessCardToReadDtoSelector();
+        var businessCardDtos = await _repository.GetAllAsync(selector);
+
+        var xmlData = SerializeToXml(businessCardDtos);
+
+        return Encoding.UTF8.GetBytes(xmlData);
+    }
 
     // Mapping methods
     private BusinessCardReadDto MapEntityToReadDto(BusinessCard entity)
@@ -52,11 +86,9 @@ public class BusinessCardService : IBusinessCardService
             DateOfBirth = entity.DateOfBirth,
             Email = entity.Email,
             Phone = entity.Phone,
-            PhotoBase64 = entity.PhotoBase64,
             Address = entity.Address
         };
     }
-
     private BusinessCard MapDtoToEntity(BusinessCardCreateDto dto)
     {
         return new BusinessCard
@@ -69,5 +101,25 @@ public class BusinessCardService : IBusinessCardService
             PhotoBase64 = dto.PhotoBase64,
             Address = dto.Address
         };
+    }
+    private Expression<Func<BusinessCard, BusinessCardReadDto>> BusinessCardToReadDtoSelector()
+    {
+        return bc => new BusinessCardReadDto
+        {
+            Id = bc.Id,
+            Name = bc.Name,
+            Gender = bc.Gender,
+            DateOfBirth = bc.DateOfBirth,
+            Email = bc.Email,
+            Phone = bc.Phone,
+            Address = bc.Address
+        };
+    }
+    private static string SerializeToXml(List<BusinessCardReadDto> businessCards)
+    {
+        var serializer = new XmlSerializer(typeof(List<BusinessCardReadDto>));
+        using var stringWriter = new StringWriter();
+        serializer.Serialize(stringWriter, businessCards);
+        return stringWriter.ToString();
     }
 }

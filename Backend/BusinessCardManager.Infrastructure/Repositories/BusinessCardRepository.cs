@@ -1,8 +1,8 @@
 ﻿using BusinessCardManager.Domain.Entities;
-using BusinessCardManager.Domain.Enums;
 using BusinessCardManager.Domain.Interfaces;
 using BusinessCardManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BusinessCardManager.Infrastructure.Repositories;
 public class BusinessCardRepository : IBusinessCardRepository
@@ -39,5 +39,12 @@ public class BusinessCardRepository : IBusinessCardRepository
             throw new KeyNotFoundException($"Business card with ID {id} was not found.");
         }
         return entity;
+    }
+    public async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<BusinessCard, TResult>> selector)
+    {
+        return await _context.BusinessCards
+            .AsNoTracking()
+            .Select(selector)
+            .ToListAsync();
     }
 }

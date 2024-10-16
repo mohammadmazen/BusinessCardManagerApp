@@ -7,4 +7,6 @@ public interface IBusinessCardService
     Task<IEnumerable<BusinessCardReadDto>> GetAllBusinessCardsAsync();
     Task<Guid> AddBusinessCardAsync(BusinessCardCreateDto businessCardDto);
     Task DeleteBusinessCardAsync(Guid id);
+    Task<byte[]> ExportBusinessCardsToCsvAsync();
+    Task<byte[]> ExportBusinessCardsToXmlAsync();
 }

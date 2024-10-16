@@ -1,6 +1,7 @@
 ﻿using BusinessCardManager.Application.DTOs;
 using BusinessCardManager.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace BusinessCardManager.WebAPI.Controllers;
 
@@ -60,5 +61,23 @@ public class BusinessCardsController : ControllerBase
         {
             return NotFound(ex.Message);
         }
+    }
+
+    [HttpGet("export/csv")]
+    public async Task<IActionResult> ExportToCsv()
+    {
+        var csvData = await _businessCardService.ExportBusinessCardsToCsvAsync();
+        var fileName = $"BusinessCards_{DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture)}.csv";
+
+        return File(csvData, "text/csv", fileName);
+    }
+
+    [HttpGet("export/xml")]
+    public async Task<IActionResult> ExportToXml()
+    {
+        var xmlData = await _businessCardService.ExportBusinessCardsToXmlAsync();
+        var fileName = $"BusinessCards_{DateTime.UtcNow.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture)}.xml";
+
+        return File(xmlData, "application/xml", fileName);
     }
 }

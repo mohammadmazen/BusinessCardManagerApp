@@ -15,7 +15,5 @@ public class BusinessCardReadDto
 
     public string Phone { get; set; }
 
-    public string PhotoBase64 { get; set; }
-
     public string Address { get; set; }
 }
